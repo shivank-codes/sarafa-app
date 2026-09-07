@@ -1,0 +1,59 @@
+@font-face {
+  font-family: 'Noto Sans Devanagari';
+  src: url('../fonts/NotoSansDevanagari-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Noto Sans Devanagari';
+  src: url('../fonts/NotoSansDevanagari-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+:root {
+  --gold: #7a5c00;
+  --bg: #fffdf7;
+  --ink: #1a1a1a;
+  --line: #e0d8c0;
+  --tap: 56px;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: 'Noto Sans Devanagari', system-ui, sans-serif;
+  font-size: 18px; padding-bottom: calc(var(--tap) + 16px + env(safe-area-inset-bottom));
+  -webkit-text-size-adjust: 100%;
+}
+#shop-name {
+  background: var(--gold); color: #fff; padding: 14px 16px;
+  font-size: 20px; font-weight: 700; text-align: center;
+}
+main { padding: 16px; }
+.panel[hidden] { display: none; }
+input, select, button { font: inherit; min-height: var(--tap); }
+input, select {
+  width: 100%; padding: 12px; margin-bottom: 14px;
+  border: 2px solid var(--line); border-radius: 10px; background: #fff;
+}
+label { display: block; margin-bottom: 6px; font-weight: 600; }
+h3 { margin: 24px 0 8px; }
+.btn {
+  display: block; width: 100%; background: var(--gold); color: #fff; border: 0;
+  border-radius: 10px; font-weight: 700; margin-bottom: 12px; cursor: pointer;
+}
+.linkbtn { line-height: var(--tap); text-align: center; text-decoration: none; }
+#tabs {
+  position: fixed; bottom: 0; left: 0; right: 0; display: flex;
+  background: #fff; border-top: 2px solid var(--line);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+#tabs button {
+  flex: 1; border: 0; background: none; color: #666; font-size: 17px; cursor: pointer;
+}
+#tabs button.active { color: var(--gold); font-weight: 700; }
+.total { font-size: 34px; font-weight: 700; color: var(--gold); }
+.row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 0; border-bottom: 1px solid var(--line); gap: 12px;
+}
+small { color: #777; }
