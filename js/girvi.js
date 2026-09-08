@@ -49,13 +49,9 @@ export function exceedsPrincipal(principalPaise, interestPaise) {
 // lets a court disallow interest where those rules were not followed, so this
 // is not paperwork for its own sake.
 export function receiptText({ pledge, amountPaise, date, shopName, registrationNo }) {
-  const reg = registrationNo
-    ? `रजिस्ट्रेशन नंबर: ${registrationNo}`
-    : 'रजिस्ट्रेशन नंबर भरें (कानूनन ज़रूरी)';
-
   return [
     shopName,
-    reg,
+    ...(registrationNo ? [`रजिस्ट्रेशन नंबर: ${registrationNo}`] : []),
     '',
     'भुगतान रसीद',
     `दिनांक: ${hindiDate(date)}`,

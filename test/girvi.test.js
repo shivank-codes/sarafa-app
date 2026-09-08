@@ -77,10 +77,11 @@ test('a receipt carries a witness line, as the Act requires', () => {
   assert.match(r, /गवाह/);
 });
 
-test('a receipt says when no registration number has been set', () => {
+test('a receipt simply omits the registration line when none is set', () => {
   const r = receiptText({
     pledge: PLEDGE, amountPaise: 100000, date: '2026-09-08',
     shopName: 'दुकान', registrationNo: ''
   });
-  assert.match(r, /रजिस्ट्रेशन नंबर भरें/);
+  assert.doesNotMatch(r, /रजिस्ट्रेशन नंबर/);
+  assert.match(r, /भुगतान रसीद/);
 });

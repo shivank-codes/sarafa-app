@@ -33,11 +33,6 @@ export async function initGirvi() {
   const outstanding = rows.reduce((s, r) => s + r.duePaise, 0);
 
   panel.innerHTML = `
-    ${!regNo ? `
-      <div class="banner soft">
-        मनी-लेंडिंग रजिस्ट्रेशन नंबर भरें — कानून के अनुसार हर रसीद पर ज़रूरी है।
-      </div>` : ''}
-
     <label for="reg-no">रजिस्ट्रेशन नंबर</label>
     <input id="reg-no" type="text" value="${regNo}" placeholder="जैसे: UP/ML/1234">
     <button id="save-reg" class="btn ghost">रजिस्ट्रेशन नंबर सुरक्षित करें</button>
