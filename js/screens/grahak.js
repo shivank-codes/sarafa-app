@@ -3,6 +3,9 @@ import { balance } from '../ledger.js';
 import { rupees } from '../fmt.js';
 import { shareBackup, restoreFrom } from '../backup.js';
 import { transliterate } from '../hindi.js';
+import { demoCustomers, demoBills, demoPayments, demoPledges,
+         demoPledgePayments } from '../demo.js';
+import { currentRates } from './bhav.js';
 
 export async function customerBalance(customerId) {
   const [bills, payments] = await Promise.all([
@@ -45,6 +48,14 @@ export async function initGrahak() {
     <label for="restore" class="btn ghost restore-label">बैकअप से वापस लाएं</label>
     <input id="restore" type="file" accept="application/json,.json" hidden>
     <p id="restore-status" class="warn"></p>
+
+    <h3>डेमो डेटा</h3>
+    <p class="muted small">ऐप को आज़माने के लिए नकली डेटा — अवागढ़ और
+       आस-पास के गाँवों के नाम से। असली हिसाब शुरू करने से पहले इसे हटा दें।
+       हटाने पर सिर्फ़ डेमो मिटेगा, आपका असली हिसाब सुरक्षित रहेगा।</p>
+    <button id="demo-load" class="btn ghost">डेमो डेटा भरें</button>
+    <button id="demo-clear" class="btn ghost">डेमो डेटा हटाएं</button>
+    <p id="demo-status" class="warn"></p>
   `;
 
   const nameInput = panel.querySelector('#new-name');
@@ -74,6 +85,44 @@ export async function initGrahak() {
   });
 
   panel.querySelector('#backup').addEventListener('click', shareBackup);
+
+  const demoStatus = panel.querySelector('#demo-status');
+
+  panel.querySelector('#demo-load').addEventListener('click', async () => {
+    demoStatus.textContent = 'डेमो डेटा भरा जा रहा है…';
+    const rates = await currentRates();
+    const sona = rates ? rates.sonaPerGram : 725000;
+    const chandi = rates ? rates.chandiPerGram : 9200;
+
+    const custIds = [];
+    for (const c of demoCustomers()) custIds.push(await db.put('customers', c));
+    for (const b of demoBills(custIds, sona, chandi)) await db.put('bills', b);
+    for (const p of demoPayments(custIds)) await db.put('payments', p);
+
+    const pledgeIds = [];
+    for (const p of demoPledges()) pledgeIds.push(await db.put('pledges', p));
+    for (const p of demoPledgePayments(pledgeIds)) await db.put('pledgePayments', p);
+
+    await initGrahak();
+    const s2 = document.getElementById('demo-status');
+    if (s2) s2.textContent = 'डेमो डेटा भर गया। हर टैब देखें।';
+  });
+
+  // Deletes ONLY records tagged demo:true. A real bill entered by hand has no
+  // such tag and is never touched.
+  panel.querySelector('#demo-clear').addEventListener('click', async () => {
+    demoStatus.textContent = 'डेमो हटाया जा रहा है…';
+    let removed = 0;
+    for (const store of ['bills', 'payments', 'customers',
+                         'pledgePayments', 'pledges', 'items']) {
+      for (const row of await db.all(store)) {
+        if (row.demo === true) { await db.del(store, row.id); removed += 1; }
+      }
+    }
+    await initGrahak();
+    const s2 = document.getElementById('demo-status');
+    if (s2) s2.textContent = `${removed} डेमो रिकॉर्ड हटाए गए। असली हिसाब सुरक्षित है।`;
+  });
 
   const restoreInput = panel.querySelector('#restore');
   const restoreStatus = panel.querySelector('#restore-status');
