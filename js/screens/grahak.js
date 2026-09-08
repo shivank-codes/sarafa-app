@@ -1,7 +1,7 @@
 import * as db from '../db.js';
 import { balance } from '../ledger.js';
 import { rupees } from '../fmt.js';
-import { shareBackup } from '../backup.js';
+import { shareBackup, restoreFrom } from '../backup.js';
 import { transliterate } from '../hindi.js';
 
 export async function customerBalance(customerId) {
@@ -39,7 +39,12 @@ export async function initGrahak() {
           <strong>${rupees(balances[i])}</strong>
         </div>`).join('')}
 
+    <h3>बैकअप</h3>
+    <p class="muted">फ़ोन खो जाए तो खाता न खोए — हफ़्ते में एक बार बैकअप भेजें।</p>
     <button id="backup" class="btn ghost">बैकअप फ़ाइल भेजें</button>
+    <label for="restore" class="btn ghost restore-label">बैकअप से वापस लाएं</label>
+    <input id="restore" type="file" accept="application/json,.json" hidden>
+    <p id="restore-status" class="warn"></p>
   `;
 
   const nameInput = panel.querySelector('#new-name');
@@ -69,4 +74,17 @@ export async function initGrahak() {
   });
 
   panel.querySelector('#backup').addEventListener('click', shareBackup);
+
+  const restoreInput = panel.querySelector('#restore');
+  const restoreStatus = panel.querySelector('#restore-status');
+  restoreInput.addEventListener('change', async () => {
+    const file = restoreInput.files[0];
+    if (!file) return;
+    restoreStatus.textContent = 'वापस लाया जा रहा है…';
+    const r = await restoreFrom(file);
+    if (!r.ok) { restoreStatus.textContent = r.error; return; }
+    restoreStatus.textContent =
+      `वापस आ गया — ${r.counts.customers} ग्राहक, ${r.counts.bills} बिल।`;
+    await initGrahak();
+  });
 }

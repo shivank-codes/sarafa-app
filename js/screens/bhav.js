@@ -1,6 +1,6 @@
 import * as db from '../db.js';
 import { rupees, hindiDate, grams } from '../fmt.js';
-import { daySummary } from '../day.js';
+import { daySummary, rateChange } from '../day.js';
 
 export function todayISO() {
   const d = new Date();
@@ -13,17 +13,40 @@ export async function currentRates() {
   return row ? { sonaPerGram: row.sonaPerGram, chandiPerGram: row.chandiPerGram } : null;
 }
 
+async function previousRate() {
+  const all = (await db.all('rates')).sort((a, b) => a.date.localeCompare(b.date));
+  const before = all.filter((r) => r.date < todayISO());
+  return before.length ? before[before.length - 1] : null;
+}
+
 const METAL = { sona: 'सोना', chandi: 'चांदी' };
+
+function changeLabel(todayPaise, prev) {
+  const ch = rateChange(todayPaise, prev);
+  if (!ch || ch.direction === 'same') return '';
+  const arrow = ch.direction === 'up' ? '▲' : '▼';
+  const word = ch.direction === 'up' ? 'ऊपर' : 'नीचे';
+  return ` <span class="${ch.direction}">${arrow} ${rupees(ch.deltaPaise)} ${word}</span>`;
+}
 
 export async function initBhav() {
   const panel = document.getElementById('panel-bhav');
   const today = todayISO();
   const saved = await currentRates();
-  const allBills = await db.byIndex('bills', 'byDate', today);
-  const sum = daySummary(allBills, today);
+  const prev = await previousRate();
+  const bills = await db.byIndex('bills', 'byDate', today);
+  const sum = daySummary(bills, today);
 
   panel.innerHTML = `
-    <p>${hindiDate(today)}</p>
+    <p class="muted">${hindiDate(today)}</p>
+
+    ${!saved && prev ? `
+      <div class="notice">
+        <p>${hindiDate(prev.date)} का भाव — सोना ${rupees(prev.sonaPerGram)},
+           चांदी ${rupees(prev.chandiPerGram)}</p>
+        <button id="carry" class="btn ghost">वही भाव आज भी लगाएं</button>
+      </div>` : ''}
+
     <label for="sona">सोना — भाव प्रति ग्राम</label>
     <input id="sona" type="number" inputmode="decimal" min="0" step="1">
     <label for="chandi">चांदी — भाव प्रति ग्राम</label>
@@ -36,12 +59,16 @@ export async function initBhav() {
     <div class="row"><span>नकद</span><strong>${rupees(sum.nakadPaise)}</strong></div>
     <div class="row"><span>उधार</span><strong>${rupees(sum.udhaarPaise)}</strong></div>
     <div class="row"><span>कुल बिल</span><strong>${sum.count}</strong></div>
-    ${allBills.length === 0 ? '<p>आज अभी कोई बिल नहीं बना।</p>' :
-      allBills.slice().reverse().map((b) => `
+
+    ${bills.length === 0 ? '<p class="muted">आज अभी कोई बिल नहीं बना।</p>' :
+      bills.slice().reverse().map((b) => `
         <div class="row">
           <span>${METAL[b.metal]} ${grams(b.weight)}<br>
             <small>${b.settlement === 'nakad' ? 'नकद' : 'उधार'}</small></span>
-          <strong>${rupees(b.totalPaise)}</strong>
+          <span class="right">
+            <strong>${rupees(b.totalPaise)}</strong><br>
+            <button class="link-danger del-bill" data-id="${b.id}">हटाएं</button>
+          </span>
         </div>`).join('')}
   `;
 
@@ -52,9 +79,20 @@ export async function initBhav() {
   if (saved) {
     sona.value = saved.sonaPerGram / 100;
     chandi.value = saved.chandiPerGram / 100;
-    status.textContent = `आज का भाव तय है — सोना ${rupees(saved.sonaPerGram)}, चांदी ${rupees(saved.chandiPerGram)}`;
+    status.innerHTML = `आज का भाव तय है — सोना ${rupees(saved.sonaPerGram)}` +
+      changeLabel(saved.sonaPerGram, prev ? prev.sonaPerGram : null) +
+      `, चांदी ${rupees(saved.chandiPerGram)}`;
   } else {
     status.textContent = 'आज का भाव अभी तय नहीं हुआ है।';
+  }
+
+  const carry = panel.querySelector('#carry');
+  if (carry) {
+    carry.addEventListener('click', () => {
+      sona.value = prev.sonaPerGram / 100;
+      chandi.value = prev.chandiPerGram / 100;
+      panel.querySelector('#save-bhav').click();
+    });
   }
 
   panel.querySelector('#save-bhav').addEventListener('click', async () => {
@@ -65,6 +103,23 @@ export async function initBhav() {
       return;
     }
     await db.put('rates', { date: today, sonaPerGram: s, chandiPerGram: c });
-    status.textContent = `भाव सुरक्षित — सोना ${rupees(s)}, चांदी ${rupees(c)}`;
+    await initBhav();
+  });
+
+  // Two-tap delete: the first tap arms it, the second removes. A mis-entered
+  // bill has to be fixable, but not by a single stray touch at the counter.
+  panel.querySelectorAll('.del-bill').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      if (btn.dataset.armed !== 'yes') {
+        btn.dataset.armed = 'yes';
+        btn.textContent = 'पक्का? हटाएं';
+        setTimeout(() => {
+          if (btn.isConnected) { btn.dataset.armed = ''; btn.textContent = 'हटाएं'; }
+        }, 4000);
+        return;
+      }
+      await db.del('bills', Number(btn.dataset.id));
+      await initBhav();
+    });
   });
 }

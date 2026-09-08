@@ -54,6 +54,27 @@ export async function get(store, key) {
   return wrap(db.transaction(store, 'readonly').objectStore(store).get(key));
 }
 
+export async function del(store, key) {
+  const db = await open();
+  const tx = db.transaction(store, 'readwrite');
+  return wrap(tx.objectStore(store).delete(key));
+}
+
+export async function clear(store) {
+  const db = await open();
+  const tx = db.transaction(store, 'readwrite');
+  return wrap(tx.objectStore(store).clear());
+}
+
+// Browsers may evict IndexedDB under storage pressure. For a shop's ledger
+// that would be silent data loss, so ask for persistent storage. On iOS this
+// is granted once the app is installed to the home screen.
+export async function requestPersistence() {
+  if (!navigator.storage || !navigator.storage.persist) return 'unsupported';
+  if (await navigator.storage.persisted()) return 'already';
+  return (await navigator.storage.persist()) ? 'granted' : 'denied';
+}
+
 export async function byIndex(store, index, value) {
   const db = await open();
   return wrap(

@@ -12,3 +12,12 @@ export function daySummary(bills, date) {
     totalPaise: nakadPaise + udhaarPaise
   };
 }
+
+export function rateChange(todayPaise, previousPaise) {
+  if (previousPaise == null) return null;
+  const diff = todayPaise - previousPaise;
+  return {
+    deltaPaise: Math.abs(diff),
+    direction: diff > 0 ? 'up' : diff < 0 ? 'down' : 'same'
+  };
+}
