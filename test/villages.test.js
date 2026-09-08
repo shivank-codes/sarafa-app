@@ -7,7 +7,14 @@ test('the village list includes Awagarh and its neighbours', () => {
   assert.ok(VILLAGES.includes('अवागढ़'));
   assert.ok(VILLAGES.includes('मारहरा'));
   assert.ok(VILLAGES.includes('जलेसर'));
-  assert.ok(VILLAGES.length >= 15);
+  assert.ok(VILLAGES.includes('कासगंज'));
+  // The whole of Etah plus Kasganj, not just the handful of towns
+  assert.ok(VILLAGES.length >= 300, `only ${VILLAGES.length} villages`);
+}); 
+
+test('the village list has no duplicates and nothing blank', () => {
+  assert.equal(new Set(VILLAGES).size, VILLAGES.length);
+  for (const v of VILLAGES) assert.ok(v.trim().length > 1, `bad name: ${v}`);
 });
 
 test('villageOf reads a stored village field', () => {

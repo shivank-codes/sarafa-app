@@ -1,4 +1,4 @@
-const CACHE = 'sarafa-v18';
+const CACHE = 'sarafa-v20';
 const SHELL = [
   './', './index.html', './css/app.css', './manifest.webmanifest',
   './js/config.js', './js/app.js', './js/fmt.js', './js/calc.js', './js/pricing.js', './js/market.js',
@@ -23,8 +23,20 @@ const SHELL = [
   './fonts/NotoSansDevanagari-Bold.woff2'
 ];
 
+// addAll() reads through the browser's HTTP cache, so a new CACHE could be
+// filled with the files the old version had — GitHub Pages serves these with
+// a ten-minute max-age, and an update inside that window would install stale
+// copies under a fresh name. Fetching with cache: 'reload' goes to the network.
 self.addEventListener('install', (e) => {
-  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));
+  e.waitUntil(
+    caches.open(CACHE)
+      .then((c) => Promise.all(SHELL.map((url) =>
+        fetch(new Request(url, { cache: 'reload' })).then((res) => {
+          if (!res.ok) throw new Error(`${url}: ${res.status}`);
+          return c.put(url, res);
+        }))))
+      .then(() => self.skipWaiting())
+  );
 });
 
 self.addEventListener('activate', (e) => {
