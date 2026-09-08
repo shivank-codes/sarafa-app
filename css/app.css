@@ -64,3 +64,10 @@ small { color: #777; }
 }
 .card .row:first-child { border-bottom: none; padding-top: 0; }
 .card p { margin: 0; color: #b00; }
+
+.preview { margin: -8px 0 14px; color: var(--gold); font-weight: 700; min-height: 1.2em; }
+.warn { color: #b00; margin: 0 0 8px; }
+.muted { color: #777; }
+.btn.ghost { background: #fff; color: var(--gold); border: 2px solid var(--gold); }
+h3 { margin: 26px 0 10px; font-size: 17px; color: #555;
+     text-transform: none; letter-spacing: .02em; }

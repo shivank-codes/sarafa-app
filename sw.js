@@ -1,8 +1,8 @@
-const CACHE = 'sarafa-v2';
+const CACHE = 'sarafa-v3';
 const SHELL = [
   './', './index.html', './css/app.css', './manifest.webmanifest',
   './js/config.js', './js/app.js', './js/fmt.js', './js/calc.js',
-  './js/ledger.js', './js/day.js', './js/db.js', './js/backup.js',
+  './js/ledger.js', './js/day.js', './js/hindi.js', './js/db.js', './js/backup.js',
   './js/screens/bhav.js', './js/screens/bill.js',
   './js/screens/udhaar.js', './js/screens/grahak.js',
   './icons/icon-192.png', './icons/icon-512.png',
