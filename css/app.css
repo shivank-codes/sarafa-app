@@ -128,3 +128,8 @@ h3 { margin: 26px 0 10px; font-size: 17px; color: #555;
 .breakup .row { padding: 8px 0; font-size: 16px; }
 .breakup .row:last-child { border-bottom: none; }
 #karat-row[hidden] { display: none; }
+
+.thumb {
+  display: block; width: 64px; height: 64px; object-fit: cover;
+  border-radius: 8px; border: 1px solid var(--line); margin-bottom: 6px;
+}

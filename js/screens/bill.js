@@ -2,6 +2,7 @@ import * as db from '../db.js';
 import { rupees } from '../fmt.js';
 import { saleTotal, PURITY } from '../pricing.js';
 import { currentRates, todayISO } from './bhav.js';
+import { compressImage, blobToDataUrl } from '../photo.js';
 
 const KARATS = [
   ['22', '22 कैरेट (916)'],
@@ -72,6 +73,12 @@ export async function initBill() {
     </div>
     <p>कुल: <span id="bill-total" class="total">₹0</span></p>
 
+    <label for="bill-photo" class="btn ghost photo-label">📷 परची / बही की फ़ोटो लगाएं</label>
+    <input id="bill-photo" type="file" accept="image/*" capture="environment" hidden>
+    <img id="bill-photo-preview" class="photo-preview" hidden alt="">
+    <p class="muted small">कागज़ की परची की फ़ोटो बिल के साथ जुड़ जाएगी —
+       बाद में मिलान करने के काम आएगी।</p>
+
     <button id="save-nakad" class="btn">नकद</button>
     <label for="cust">उधार — ग्राहक</label>
     <select id="cust">
@@ -83,6 +90,7 @@ export async function initBill() {
   `;
 
   const $ = (id) => panel.querySelector('#' + id);
+  let billPhoto = null;
   const metal = $('metal');
   const karatRow = $('karat-row');
   const status = $('bill-status');
@@ -122,6 +130,21 @@ export async function initBill() {
     });
   refresh();
 
+  $('bill-photo').addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    status.textContent = 'फ़ोटो तैयार हो रही है…';
+    try {
+      billPhoto = await blobToDataUrl(await compressImage(file));
+      const p = $('bill-photo-preview');
+      p.src = billPhoto;
+      p.hidden = false;
+      status.textContent = '';
+    } catch {
+      status.textContent = 'फ़ोटो नहीं पढ़ी जा सकी।';
+    }
+  });
+
   async function save(settlement, customerId) {
     const w = Number($('weight').value);
     if (!(w > 0)) { status.textContent = 'वज़न भरें।'; return; }
@@ -150,12 +173,15 @@ export async function initBill() {
       oldGoldPaise: r.oldGoldPaise,
       totalPaise: r.totalPaise,
       settlement,
-      customerId: customerId || null
+      customerId: customerId || null,
+      photo: billPhoto
     });
 
     status.textContent = `बिल ${await nextBillNo() - 1} सुरक्षित — ${rupees(r.totalPaise)}`;
     $('weight').value = '';
     $('oldgold').value = '0';
+    billPhoto = null;
+    $('bill-photo-preview').hidden = true;
     refresh();
     const label = panel.querySelector('.muted');
     if (label) label.textContent = `बिल नंबर ${await nextBillNo()}`;

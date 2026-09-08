@@ -69,8 +69,9 @@ export async function initBhav() {
     ${bills.length === 0 ? '<p class="muted">आज अभी कोई बिल नहीं बना।</p>' :
       bills.slice().reverse().map((b) => `
         <div class="row">
-          <span>${METAL[b.metal]} ${grams(b.weight)}<br>
-            <small>${b.settlement === 'nakad' ? 'नकद' : 'उधार'}</small></span>
+          <span>${b.photo ? `<img class="thumb" src="${b.photo}" alt="परची">` : ''}
+            ${METAL[b.metal]} ${grams(b.weight)}${b.karat ? ` · ${b.karat}K` : ''}<br>
+            <small>${b.settlement === 'nakad' ? 'नकद' : 'उधार'}${b.billNo ? ` · बिल ${b.billNo}` : ''}</small></span>
           <span class="right">
             <strong>${rupees(b.totalPaise)}</strong><br>
             <button class="link-danger del-bill" data-id="${b.id}">हटाएं</button>
