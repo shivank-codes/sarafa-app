@@ -61,7 +61,7 @@ const PLEDGE = {
 test('a payment receipt states the true principal and registration number', () => {
   const r = receiptText({
     pledge: PLEDGE, amountPaise: 100000, date: '2026-09-08',
-    shopName: 'संकेत गोयल मुकेश कुमार सर्राफ', registrationNo: 'UP/ML/1234'
+    shopName: 'संकेत कुमार मुकेश कुमार सर्राफ', registrationNo: 'UP/ML/1234'
   });
   assert.match(r, /मूल रकम/);
   assert.match(r, /₹50,000/);

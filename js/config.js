@@ -1,4 +1,4 @@
-export const SHOP_NAME = 'संकेत गोयल मुकेश कुमार सर्राफ';
+export const SHOP_NAME = 'संकेत कुमार मुकेश कुमार सर्राफ';
 export const APP_VERSION = '1';
 
 // Money-lending registration number under the UP Regulation of Money-Lending
