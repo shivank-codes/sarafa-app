@@ -1,8 +1,8 @@
-const CACHE = 'sarafa-v1';
+const CACHE = 'sarafa-v2';
 const SHELL = [
   './', './index.html', './css/app.css', './manifest.webmanifest',
   './js/config.js', './js/app.js', './js/fmt.js', './js/calc.js',
-  './js/ledger.js', './js/db.js', './js/backup.js',
+  './js/ledger.js', './js/day.js', './js/db.js', './js/backup.js',
   './js/screens/bhav.js', './js/screens/bill.js',
   './js/screens/udhaar.js', './js/screens/grahak.js',
   './icons/icon-192.png', './icons/icon-512.png',
@@ -22,7 +22,24 @@ self.addEventListener('activate', (e) => {
   );
 });
 
+// Stale-while-revalidate: answer instantly from cache so the counter never
+// waits on the network, then quietly refresh the cache for the next launch.
+// Without the revalidate half, editing any file other than sw.js would never
+// reach the phone.
 self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
-  e.respondWith(caches.match(e.request).then((hit) => hit || fetch(e.request)));
+  if (new URL(e.request.url).origin !== self.location.origin) return;
+
+  e.respondWith(
+    caches.open(CACHE).then(async (cache) => {
+      const cached = await cache.match(e.request);
+      const network = fetch(e.request)
+        .then((res) => {
+          if (res && res.ok) cache.put(e.request, res.clone());
+          return res;
+        })
+        .catch(() => null);
+      return cached || (await network) || new Response('', { status: 504 });
+    })
+  );
 });

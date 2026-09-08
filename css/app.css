@@ -57,3 +57,10 @@ h3 { margin: 24px 0 8px; }
   padding: 14px 0; border-bottom: 1px solid var(--line); gap: 12px;
 }
 small { color: #777; }
+
+.card {
+  border: 2px solid var(--line); border-radius: 12px;
+  padding: 12px; margin-bottom: 16px; background: #fff;
+}
+.card .row:first-child { border-bottom: none; padding-top: 0; }
+.card p { margin: 0; color: #b00; }

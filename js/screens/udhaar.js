@@ -30,23 +30,33 @@ export async function initUdhaar() {
     <p>कुल बकाया: <span class="total">${rupees(totalDue)}</span></p>
     ${rows.length === 0 ? '<p>किसी का उधार बाकी नहीं है।</p>' :
       rows.map((r) => `
-        <div class="row">
-          <span>${r.customer.name}</span>
-          <strong>${rupees(r.balancePaise)}</strong>
+        <div class="card">
+          <div class="row">
+            <span>${r.customer.name}</span>
+            <strong>${rupees(r.balancePaise)}</strong>
+          </div>
+          <input class="pay-amt" type="number" inputmode="decimal" min="0" step="1"
+                 placeholder="भुगतान राशि (₹)" data-id="${r.customer.id}">
+          <button class="btn pay" data-id="${r.customer.id}">भुगतान दर्ज करें</button>
+          ${r.customer.phone ? `<a class="btn linkbtn" href="${reminderLink(r.customer, r.balancePaise)}"
+              target="_blank" rel="noopener">WhatsApp पर याद दिलाएं</a>` : ''}
+          <p class="pay-status" data-id="${r.customer.id}"></p>
         </div>
-        <button class="btn pay" data-id="${r.customer.id}">भुगतान दर्ज करें</button>
-        ${r.customer.phone ? `<a class="btn linkbtn" href="${reminderLink(r.customer, r.balancePaise)}"
-            target="_blank" rel="noopener">WhatsApp पर याद दिलाएं</a>` : ''}
       `).join('')}
   `;
 
   panel.querySelectorAll('.pay').forEach((btn) => {
     btn.addEventListener('click', async () => {
-      const input = prompt('कितना भुगतान मिला? (₹)');
-      const amount = Math.round(Number(input) * 100);
-      if (!(amount > 0)) return;
+      const id = Number(btn.dataset.id);
+      const input = panel.querySelector(`.pay-amt[data-id="${id}"]`);
+      const status = panel.querySelector(`.pay-status[data-id="${id}"]`);
+      const amount = Math.round(Number(input.value) * 100);
+      if (!(amount > 0)) {
+        status.textContent = 'राशि भरें।';
+        return;
+      }
       await db.put('payments', {
-        customerId: Number(btn.dataset.id),
+        customerId: id,
         amountPaise: amount,
         date: new Date().toISOString().slice(0, 10)
       });

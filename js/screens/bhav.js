@@ -1,5 +1,6 @@
 import * as db from '../db.js';
-import { rupees, hindiDate } from '../fmt.js';
+import { rupees, hindiDate, grams } from '../fmt.js';
+import { daySummary } from '../day.js';
 
 export function todayISO() {
   const d = new Date();
@@ -12,10 +13,14 @@ export async function currentRates() {
   return row ? { sonaPerGram: row.sonaPerGram, chandiPerGram: row.chandiPerGram } : null;
 }
 
+const METAL = { sona: 'सोना', chandi: 'चांदी' };
+
 export async function initBhav() {
   const panel = document.getElementById('panel-bhav');
   const today = todayISO();
   const saved = await currentRates();
+  const allBills = await db.byIndex('bills', 'byDate', today);
+  const sum = daySummary(allBills, today);
 
   panel.innerHTML = `
     <p>${hindiDate(today)}</p>
@@ -25,6 +30,19 @@ export async function initBhav() {
     <input id="chandi" type="number" inputmode="decimal" min="0" step="0.01">
     <button id="save-bhav" class="btn">आज का भाव सुरक्षित करें</button>
     <p id="bhav-status"></p>
+
+    <h3>आज की बिक्री</h3>
+    <p>कुल: <span class="total">${rupees(sum.totalPaise)}</span></p>
+    <div class="row"><span>नकद</span><strong>${rupees(sum.nakadPaise)}</strong></div>
+    <div class="row"><span>उधार</span><strong>${rupees(sum.udhaarPaise)}</strong></div>
+    <div class="row"><span>कुल बिल</span><strong>${sum.count}</strong></div>
+    ${allBills.length === 0 ? '<p>आज अभी कोई बिल नहीं बना।</p>' :
+      allBills.slice().reverse().map((b) => `
+        <div class="row">
+          <span>${METAL[b.metal]} ${grams(b.weight)}<br>
+            <small>${b.settlement === 'nakad' ? 'नकद' : 'उधार'}</small></span>
+          <strong>${rupees(b.totalPaise)}</strong>
+        </div>`).join('')}
   `;
 
   const sona = panel.querySelector('#sona');
