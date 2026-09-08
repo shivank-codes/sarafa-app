@@ -2,16 +2,15 @@ import * as db from './db.js';
 import { APP_VERSION } from './config.js';
 import { validateBackup } from './backup-validate.js';
 
-const STORES = ['rates', 'bills', 'customers', 'payments', 'items'];
+const STORES = ['rates', 'bills', 'customers', 'payments', 'items', 'pledges', 'pledgePayments'];
 
 export async function exportAll() {
-  const [rates, bills, customers, payments, items] = await Promise.all(
-    STORES.map((s) => db.all(s))
-  );
+  const [rates, bills, customers, payments, items, pledges, pledgePayments] =
+    await Promise.all(STORES.map((s) => db.all(s)));
   return {
     version: APP_VERSION,
     exportedAt: new Date().toISOString(),
-    rates, bills, customers, payments, items
+    rates, bills, customers, payments, items, pledges, pledgePayments
   };
 }
 

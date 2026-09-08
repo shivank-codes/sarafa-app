@@ -1,7 +1,7 @@
 const REQUIRED = ['rates', 'bills', 'customers', 'payments'];
 // Added after the first release. A backup taken before the catalog existed
 // must still restore, so this store is optional and defaults to empty.
-const OPTIONAL = ['items'];
+const OPTIONAL = ['items', 'pledges', 'pledgePayments'];
 
 export function validateBackup(data) {
   if (!data || typeof data !== 'object' || Array.isArray(data)) {

@@ -5,8 +5,9 @@ import { initBill } from './screens/bill.js';
 import { initUdhaar } from './screens/udhaar.js';
 import { initGrahak } from './screens/grahak.js';
 import { initDesign } from './screens/design.js';
+import { initGirvi } from './screens/girvi.js';
 
-const TABS = ['bhav', 'bill', 'udhaar', 'grahak', 'design'];
+const TABS = ['bhav', 'bill', 'udhaar', 'grahak', 'design', 'girvi'];
 
 export function showTab(name) {
   for (const t of TABS) {
@@ -19,6 +20,7 @@ export function showTab(name) {
   if (name === 'udhaar') initUdhaar();
   if (name === 'grahak') initGrahak();
   if (name === 'design') initDesign();
+  if (name === 'girvi') initGirvi();
 }
 
 document.getElementById('shop-name').textContent = SHOP_NAME;

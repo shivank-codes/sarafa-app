@@ -108,3 +108,15 @@ h3 { margin: 26px 0 10px; font-size: 17px; color: #555;
 .card.item .price { color: var(--gold); font-weight: 700; font-size: 19px; }
 .card.item .btn { margin: 6px 0 0; min-height: 44px; font-size: 16px; }
 @media (max-width: 340px) { .grid { grid-template-columns: 1fr; } }
+
+#tabs button { font-size: 13px; }
+.banner.soft {
+  background: #fff4d6; color: #6b4e00; border: 2px solid var(--gold);
+  border-radius: 10px; padding: 10px 12px; margin-bottom: 16px;
+  font-weight: 700; text-align: left;
+}
+.small { font-size: 14px; }
+.pledge-photo {
+  width: 100%; max-height: 200px; object-fit: cover;
+  border-radius: 8px; margin-bottom: 8px;
+}
