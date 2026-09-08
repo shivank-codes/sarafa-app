@@ -1,6 +1,7 @@
 import * as db from '../db.js';
 import { rupees, hindiDate, grams } from '../fmt.js';
 import { daySummary, rateChange } from '../day.js';
+import { initMarketPanel } from './market-panel.js';
 
 export function todayISO() {
   const d = new Date();
@@ -56,6 +57,9 @@ export async function initBhav() {
     <button id="save-bhav" class="btn">आज का भाव सुरक्षित करें</button>
     <p id="bhav-status"></p>
 
+    <h3>अंतरराष्ट्रीय भाव (सिर्फ़ जानकारी के लिए)</h3>
+    <div id="market-panel" class="breakup"></div>
+
     <h3>आज की बिक्री</h3>
     <p>कुल: <span class="total">${rupees(sum.totalPaise)}</span></p>
     <div class="row"><span>नकद</span><strong>${rupees(sum.nakadPaise)}</strong></div>
@@ -73,6 +77,8 @@ export async function initBhav() {
           </span>
         </div>`).join('')}
   `;
+
+  initMarketPanel(panel.querySelector('#market-panel'));
 
   const sona = panel.querySelector('#sona');
   const chandi = panel.querySelector('#chandi');

@@ -63,15 +63,11 @@ export async function initBill() {
     <label for="oldgold">पुराना सोना/चांदी वापस (₹)</label>
     <input id="oldgold" type="number" inputmode="decimal" min="0" step="1" value="0">
 
-    <label for="gst">जीएसटी (%)</label>
-    <input id="gst" type="number" inputmode="decimal" min="0" step="0.5" value="0">
-
     <div class="breakup">
       <div class="row"><span>आज का भाव (999)</span><strong id="bk-base"></strong></div>
       <div class="row"><span>इस शुद्धता का भाव</span><strong id="bk-rate"></strong></div>
       <div class="row"><span>धातु</span><strong id="bk-metal"></strong></div>
       <div class="row"><span>मजदूरी</span><strong id="bk-making"></strong></div>
-      <div class="row" id="bk-gst-row"><span>जीएसटी</span><strong id="bk-gst"></strong></div>
       <div class="row" id="bk-old-row"><span>पुराना वापस</span><strong id="bk-old"></strong></div>
     </div>
     <p>कुल: <span id="bill-total" class="total">₹0</span></p>
@@ -101,7 +97,7 @@ export async function initBill() {
       karat: isGold() ? $('karat').value : null,
       making: { mode: $('making-mode').value, value: Number($('making').value) || 0 },
       oldGoldPaise: Math.round((Number($('oldgold').value) || 0) * 100),
-      gstPercent: Number($('gst').value) || 0
+      gstPercent: 0
     });
   }
 
@@ -113,14 +109,12 @@ export async function initBill() {
     $('bk-rate').textContent = rupees(r.ratePerGram) + ' /ग्राम';
     $('bk-metal').textContent = rupees(r.metalPaise);
     $('bk-making').textContent = rupees(r.makingPaise);
-    $('bk-gst').textContent = rupees(r.gstPaise);
     $('bk-old').textContent = '− ' + rupees(r.oldGoldPaise);
-    $('bk-gst-row').hidden = r.gstPaise === 0;
     $('bk-old-row').hidden = r.oldGoldPaise === 0;
     $('bill-total').textContent = rupees(r.totalPaise);
   }
 
-  ['metal', 'karat', 'weight', 'making-mode', 'making', 'oldgold', 'gst']
+  ['metal', 'karat', 'weight', 'making-mode', 'making', 'oldgold']
     .forEach((id) => {
       const el = $(id);
       el.addEventListener('input', refresh);
@@ -152,8 +146,7 @@ export async function initBill() {
       makingMode: $('making-mode').value,
       makingValue: Number($('making').value) || 0,
       makingPaise: r.makingPaise,
-      gstPercent: Number($('gst').value) || 0,
-      gstPaise: r.gstPaise,
+      gstPaise: 0,
       oldGoldPaise: r.oldGoldPaise,
       totalPaise: r.totalPaise,
       settlement,
