@@ -45,7 +45,13 @@ function word(w) {
     }
     const v = matchAt(VOWELS, w, i);
     if (v) {
-      out += lastWasConsonant ? v[2] : v[1];
+      // A single 'a' after a consonant is the inherent schwa and writes
+      // nothing — कमल for "kamal". At the end of a word it is not silent: it
+      // is the ा of सीता, पूजा, कमला. Dropping it produced सित and पूज, and
+      // those names then failed to match anything in the catalog either.
+      const atEnd = i + v[0].length === w.length;
+      const matra = (v[0] === 'a' && atEnd) ? 'ा' : v[2];
+      out += lastWasConsonant ? matra : v[1];
       i += v[0].length;
       lastWasConsonant = false;
       continue;

@@ -23,8 +23,12 @@ const PHOTOS = new Set(['jhumka', 'nath', 'ring', 'bangle', 'payal', 'haar', 'ch
 
 export function sketchFor(name) {
   const n = String(name || '');
+  // A transliterated name carries halants — "jhumka" arrives as झुम्का, which
+  // does not contain झुमक — so each rule is tried against the stripped form
+  // too. Both forms are kept: मंगलसूत्र is only itself with its ्र intact.
+  const bare = n.replace(/\u094D/g, '');
   for (const [re, kind] of RULES) {
-    if (!re.test(n)) continue;
+    if (!re.test(n) && !re.test(bare)) continue;
     return PHOTOS.has(kind)
       ? `img/designs/photos/${kind}.jpg`
       : `img/designs/${kind}.svg`;

@@ -37,3 +37,18 @@ test('spaces separate words', () => {
 test('empty input gives empty output', () => {
   assert.equal(transliterate(''), '');
 });
+
+test('a name ending in "a" keeps its ा — it is not the silent schwa', () => {
+  // These were सित, पूज, गीत and अनित before: a different word to a reader,
+  // and common enough in his book to matter.
+  assert.equal(transliterate('pooja'), 'पूजा');
+  assert.equal(transliterate('geeta'), 'गीता');
+  assert.equal(transliterate('anita'), 'अनिता');
+  assert.equal(transliterate('seema'), 'सीमा');
+});
+
+test('a schwa inside a word is still silent', () => {
+  assert.equal(transliterate('kamal'), 'कमल');
+  assert.equal(transliterate('mohan'), 'मोहन');
+  assert.equal(transliterate('suresh'), 'सुरेश');
+});
