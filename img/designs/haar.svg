@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="हार">
+<defs>
+<linearGradient id="au" x1="0" y1="0" x2="0.4" y2="1">
+  <stop offset="0%" stop-color="#fbeaa0"/><stop offset="45%" stop-color="#e0b423"/>
+  <stop offset="100%" stop-color="#a97a06"/></linearGradient>
+<linearGradient id="ag" x1="0" y1="0" x2="0.4" y2="1">
+  <stop offset="0%" stop-color="#f4f6f8"/><stop offset="45%" stop-color="#c9d2d8"/>
+  <stop offset="100%" stop-color="#8e9aa3"/></linearGradient>
+<radialGradient id="velvet" cx="50%" cy="42%" r="72%">
+  <stop offset="0%" stop-color="#b7241a"/><stop offset="70%" stop-color="#8e1710"/>
+  <stop offset="100%" stop-color="#5e0d09"/></radialGradient>
+</defs>
+<rect width="100" height="100" rx="8" fill="#4a0a07"/>
+<rect x="3" y="3" width="94" height="94" rx="6" fill="url(#velvet)"/>
+<rect x="3" y="3" width="94" height="94" rx="6" fill="none" stroke="#d9a441" stroke-width="2"/>
+<rect x="6.5" y="6.5" width="87" height="87" rx="4" fill="none" stroke="#e8c06a" stroke-width="0.6" opacity=".55"/>
+<g fill="url(#au)" stroke="#7a5406" stroke-width="1" stroke-linejoin="round">
+<path d="M12 20c6 26 20 40 38 40s32-14 38-40c-3 0-5 0-6 2-5 22-17 33-32 33S23 44 18 22c-1-2-3-2-6-2z"/><path d="M20 30c5 20 16 30 30 30s25-10 30-30c-3 1-4 1-5 3-4 16-14 24-25 24S29 49 25 33c-1-2-2-2-5-3z"/><path d="M26 52v5"/><path d="M26 57l-4 6 4 8 4-8z"/><path d="M34 58v5"/><path d="M34 63l-4 6 4 8 4-8z"/><path d="M42 62v5"/><path d="M42 67l-4 6 4 8 4-8z"/><path d="M50 63v5"/><path d="M50 68l-4 6 4 8 4-8z"/><path d="M58 62v5"/><path d="M58 67l-4 6 4 8 4-8z"/><path d="M66 58v5"/><path d="M66 63l-4 6 4 8 4-8z"/><path d="M74 52v5"/><path d="M74 57l-4 6 4 8 4-8z"/><circle cx="30" cy="44" r="1.6"/><circle cx="40" cy="50" r="1.6"/><circle cx="50" cy="53" r="1.6"/><circle cx="60" cy="50" r="1.6"/><circle cx="70" cy="44" r="1.6"/></g></svg>

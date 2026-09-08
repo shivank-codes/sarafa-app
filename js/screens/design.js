@@ -6,6 +6,7 @@ import { compressImage, blobToDataUrl } from '../photo.js';
 import { currentRates } from './bhav.js';
 import { SHOP_NAME } from '../config.js';
 import { SAMPLE_ITEMS, REGIONAL_ITEMS } from '../samples.js';
+import { sketchFor } from '../sketch.js';
 
 const METAL = { sona: 'सोना', chandi: 'चांदी' };
 
@@ -52,7 +53,11 @@ export async function initDesign() {
       <div class="grid">
         ${items.slice().reverse().map((it) => `
           <div class="card item">
-            ${it.photo ? `<img src="${it.photo}" alt="${it.name}" loading="lazy">` : ''}
+            ${it.photo
+              ? `<img src="${it.photo}" alt="${it.name}" loading="lazy">`
+              : (sketchFor(it.name)
+                  ? `<img class="sketch" src="${sketchFor(it.name)}" alt="" loading="lazy">`
+                  : '')}
             <strong>${it.name}</strong>
             <small>${METAL[it.metal]} · ${grams(it.weight)}</small>
             <span class="price">${priceLine(it, rates)}</span>

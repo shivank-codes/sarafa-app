@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img"
+     aria-label="सर्राफ">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0%" stop-color="#f9d564"/>
+      <stop offset="100%" stop-color="#c48c05"/>
+    </linearGradient>
+  </defs>
+  <!-- opaque field: iOS home-screen icons ignore transparency -->
+  <rect width="512" height="512" fill="#7a5c00"/>
+  <circle cx="256" cy="256" r="214" fill="url(#g)"/>
+  <circle cx="256" cy="256" r="214" fill="none" stroke="#5c4400" stroke-width="12"/>
+  <circle cx="256" cy="256" r="192" fill="none" stroke="#5c4400" stroke-width="3"/>
+
+  <!-- trishul finial: the shop's kul-devi mark -->
+  <g fill="#4a3600">
+    <path d="M256 84c5 9 8 16 8 23h-16c0-7 3-14 8-23z"/>
+    <path d="M228 100c0 13 2 22 7 29h-8c-6-9-8-20-7-33z"/>
+    <path d="M284 100c0 13-2 22-7 29h8c6-9 8-20 7-33z"/>
+    <rect x="224" y="126" width="64" height="9" rx="4.5"/>
+  </g>
+
+  <!-- jeweller's hand balance -->
+  <g fill="none" stroke="#4a3600" stroke-width="11" stroke-linecap="round">
+    <path d="M256 135v54"/>
+    <path d="M136 196h240"/>
+    <path d="M136 196l-30 54M136 196l30 54"/>
+    <path d="M376 196l-30 54M376 196l30 54"/>
+  </g>
+  <g fill="#4a3600">
+    <circle cx="256" cy="196" r="17"/>
+    <path d="M96 250h80a40 40 0 0 1-80 0z"/>
+    <path d="M336 250h80a40 40 0 0 1-80 0z"/>
+  </g>
+  <!-- gold grains in the near pan -->
+  <g fill="#f9d564">
+    <circle cx="124" cy="258" r="9"/><circle cx="146" cy="258" r="9"/>
+    <circle cx="135" cy="272" r="9"/>
+  </g>
+
+  <!-- lotus seat -->
+  <g fill="#4a3600">
+    <path d="M256 336c-24 22-58 28-90 24 16-26 52-36 90-24z"/>
+    <path d="M256 336c24 22 58 28 90 24-16-26-52-36-90-24z"/>
+    <path d="M256 332c-19 30-19 48 0 66 19-18 19-36 0-66z"/>
+  </g>
+</svg>

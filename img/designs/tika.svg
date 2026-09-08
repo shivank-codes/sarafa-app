@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="मांग टीका">
+<defs>
+<linearGradient id="au" x1="0" y1="0" x2="0.4" y2="1">
+  <stop offset="0%" stop-color="#fbeaa0"/><stop offset="45%" stop-color="#e0b423"/>
+  <stop offset="100%" stop-color="#a97a06"/></linearGradient>
+<linearGradient id="ag" x1="0" y1="0" x2="0.4" y2="1">
+  <stop offset="0%" stop-color="#f4f6f8"/><stop offset="45%" stop-color="#c9d2d8"/>
+  <stop offset="100%" stop-color="#8e9aa3"/></linearGradient>
+<radialGradient id="velvet" cx="50%" cy="42%" r="72%">
+  <stop offset="0%" stop-color="#b7241a"/><stop offset="70%" stop-color="#8e1710"/>
+  <stop offset="100%" stop-color="#5e0d09"/></radialGradient>
+</defs>
+<rect width="100" height="100" rx="8" fill="#4a0a07"/>
+<rect x="3" y="3" width="94" height="94" rx="6" fill="url(#velvet)"/>
+<rect x="3" y="3" width="94" height="94" rx="6" fill="none" stroke="#d9a441" stroke-width="2"/>
+<rect x="6.5" y="6.5" width="87" height="87" rx="4" fill="none" stroke="#e8c06a" stroke-width="0.6" opacity=".55"/>
+<g fill="url(#au)" stroke="#7a5406" stroke-width="1" stroke-linejoin="round">
+<path d="M14 18c14 0 26 2 38 6" fill="none" stroke="#7a5406" stroke-width="1.6"/><circle cx="18" cy="18" r="1.6"/><circle cx="26" cy="19" r="1.6"/><circle cx="34" cy="21" r="1.6"/><circle cx="42" cy="23" r="1.6"/><path d="M12 14a5 5 0 1 1 0 9 5 5 0 0 1 0-9z" fill="none" stroke="#7a5406" stroke-width="1.6"/><path d="M52 24v10"/><circle cx="52" cy="50" r="16"/><circle cx="52" cy="50" r="7" fill="#b7241a" stroke="#7a5406" stroke-width="1"/><path d="M52 50l15.0 0.0" stroke="#7a5406" stroke-width="0.7" fill="none" opacity=".7"/><path d="M52 50l13.0 7.5" stroke="#7a5406" stroke-width="0.7" fill="none" opacity=".7"/><path d="M52 50l7.5 13.0" stroke="#7a5406" stroke-width="0.7" fill="none" opacity=".7"/><path d="M52 50l0.0 15.0" stroke="#7a5406" stroke-width="0.7" fill="none" opacity=".7"/><path d="M52 50l-7.5 13.0" stroke="#7a5406" stroke-width="0.7" fill="none" opacity=".7"/><path d="M52 50l-13.0 7.5" stroke="#7a5406" stroke-width="0.7" fill="none" opacity=".7"/><path d="M52 50l-15.0 0.0" stroke="#7a5406" stroke-width="0.7" fill="none" opacity=".7"/><path d="M52 50l-13.0 -7.5" stroke="#7a5406" stroke-width="0.7" fill="none" opacity=".7"/><path d="M52 50l-7.5 -13.0" stroke="#7a5406" stroke-width="0.7" fill="none" opacity=".7"/><path d="M52 50l-0.0 -15.0" stroke="#7a5406" stroke-width="0.7" fill="none" opacity=".7"/><path d="M52 50l7.5 -13.0" stroke="#7a5406" stroke-width="0.7" fill="none" opacity=".7"/><path d="M52 50l13.0 -7.5" stroke="#7a5406" stroke-width="0.7" fill="none" opacity=".7"/><path d="M70.0 50.0a2.4 2.4 0 1 1 0.01 0z"/><path d="M64.7 62.7a2.4 2.4 0 1 1 0.01 0z"/><path d="M52.0 68.0a2.4 2.4 0 1 1 0.01 0z"/><path d="M39.3 62.7a2.4 2.4 0 1 1 0.01 0z"/><path d="M34.0 50.0a2.4 2.4 0 1 1 0.01 0z"/><path d="M39.3 37.3a2.4 2.4 0 1 1 0.01 0z"/><path d="M52.0 32.0a2.4 2.4 0 1 1 0.01 0z"/><path d="M64.7 37.3a2.4 2.4 0 1 1 0.01 0z"/><path d="M52 68v6"/><path d="M52 74l-4 6 4 7 4-7z"/></g></svg>

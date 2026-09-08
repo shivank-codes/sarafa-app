@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="राखी">
+<defs>
+<linearGradient id="au" x1="0" y1="0" x2="0.4" y2="1">
+  <stop offset="0%" stop-color="#fbeaa0"/><stop offset="45%" stop-color="#e0b423"/>
+  <stop offset="100%" stop-color="#a97a06"/></linearGradient>
+<linearGradient id="ag" x1="0" y1="0" x2="0.4" y2="1">
+  <stop offset="0%" stop-color="#f4f6f8"/><stop offset="45%" stop-color="#c9d2d8"/>
+  <stop offset="100%" stop-color="#8e9aa3"/></linearGradient>
+<radialGradient id="velvet" cx="50%" cy="42%" r="72%">
+  <stop offset="0%" stop-color="#b7241a"/><stop offset="70%" stop-color="#8e1710"/>
+  <stop offset="100%" stop-color="#5e0d09"/></radialGradient>
+</defs>
+<rect width="100" height="100" rx="8" fill="#4a0a07"/>
+<rect x="3" y="3" width="94" height="94" rx="6" fill="url(#velvet)"/>
+<rect x="3" y="3" width="94" height="94" rx="6" fill="none" stroke="#d9a441" stroke-width="2"/>
+<rect x="6.5" y="6.5" width="87" height="87" rx="4" fill="none" stroke="#e8c06a" stroke-width="0.6" opacity=".55"/>
+<g fill="url(#au)" stroke="#7a5406" stroke-width="1" stroke-linejoin="round">
+<ellipse cx="50" cy="32" rx="6.5" ry="11" transform="rotate(0 50 50)"/><ellipse cx="50" cy="32" rx="6.5" ry="11" transform="rotate(40 50 50)"/><ellipse cx="50" cy="32" rx="6.5" ry="11" transform="rotate(80 50 50)"/><ellipse cx="50" cy="32" rx="6.5" ry="11" transform="rotate(120 50 50)"/><ellipse cx="50" cy="32" rx="6.5" ry="11" transform="rotate(160 50 50)"/><ellipse cx="50" cy="32" rx="6.5" ry="11" transform="rotate(200 50 50)"/><ellipse cx="50" cy="32" rx="6.5" ry="11" transform="rotate(240 50 50)"/><ellipse cx="50" cy="32" rx="6.5" ry="11" transform="rotate(280 50 50)"/><ellipse cx="50" cy="32" rx="6.5" ry="11" transform="rotate(320 50 50)"/><circle cx="50" cy="50" r="10"/><circle cx="50" cy="50" r="5" fill="#b7241a" stroke="#7a5406" stroke-width="1"/><path d="M8 46c10-8 18-8 24-3M92 46c-10-8-18-8-24-3" fill="none" stroke="#c8352a" stroke-width="3"/><path d="M8 46c10-8 18-8 24-3M92 46c-10-8-18-8-24-3" fill="none" stroke="#f0d060" stroke-width="1" opacity=".7"/></g></svg>

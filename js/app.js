@@ -23,7 +23,7 @@ export function showTab(name) {
   if (name === 'girvi') initGirvi();
 }
 
-document.getElementById('shop-name').textContent = SHOP_NAME;
+document.getElementById('shop-title').textContent = SHOP_NAME;
 document.getElementById('tabs').addEventListener('click', (e) => {
   const btn = e.target.closest('button[data-tab]');
   if (btn) showTab(btn.dataset.tab);

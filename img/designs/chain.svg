@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="चेन">
+<defs>
+<linearGradient id="au" x1="0" y1="0" x2="0.4" y2="1">
+  <stop offset="0%" stop-color="#fbeaa0"/><stop offset="45%" stop-color="#e0b423"/>
+  <stop offset="100%" stop-color="#a97a06"/></linearGradient>
+<linearGradient id="ag" x1="0" y1="0" x2="0.4" y2="1">
+  <stop offset="0%" stop-color="#f4f6f8"/><stop offset="45%" stop-color="#c9d2d8"/>
+  <stop offset="100%" stop-color="#8e9aa3"/></linearGradient>
+<radialGradient id="velvet" cx="50%" cy="42%" r="72%">
+  <stop offset="0%" stop-color="#b7241a"/><stop offset="70%" stop-color="#8e1710"/>
+  <stop offset="100%" stop-color="#5e0d09"/></radialGradient>
+</defs>
+<rect width="100" height="100" rx="8" fill="#4a0a07"/>
+<rect x="3" y="3" width="94" height="94" rx="6" fill="url(#velvet)"/>
+<rect x="3" y="3" width="94" height="94" rx="6" fill="none" stroke="#d9a441" stroke-width="2"/>
+<rect x="6.5" y="6.5" width="87" height="87" rx="4" fill="none" stroke="#e8c06a" stroke-width="0.6" opacity=".55"/>
+<g fill="url(#au)" stroke="#7a5406" stroke-width="1" stroke-linejoin="round">
+<path d="M18 28c10 22 22 30 32 30s22-8 32-30" fill="none" stroke="#7a5406" stroke-width="0.8" opacity=".5"/><ellipse cx="18" cy="28" rx="3.2" ry="2.2" transform="rotate(58 18 28)"/><ellipse cx="24" cy="36" rx="3.2" ry="2.2" transform="rotate(48 24 36)"/><ellipse cx="31" cy="43" rx="3.2" ry="2.2" transform="rotate(34 31 43)"/><ellipse cx="39" cy="48" rx="3.2" ry="2.2" transform="rotate(20 39 48)"/><ellipse cx="50" cy="50" rx="3.2" ry="2.2" transform="rotate(0 50 50)"/><ellipse cx="61" cy="48" rx="3.2" ry="2.2" transform="rotate(-20 61 48)"/><ellipse cx="69" cy="43" rx="3.2" ry="2.2" transform="rotate(-34 69 43)"/><ellipse cx="76" cy="36" rx="3.2" ry="2.2" transform="rotate(-48 76 36)"/><ellipse cx="82" cy="28" rx="3.2" ry="2.2" transform="rotate(-58 82 28)"/><path d="M50 57v6"/><circle cx="50" cy="63" r="2"/><path d="M50 65l-7 9 7 11 7-11z"/><path d="M43 74h14" fill="none" stroke="#7a5406" stroke-width="0.8"/><ellipse cx="46" cy="70" rx="2" ry="3" fill="#fff3c4" opacity=".45" stroke="none"/></g></svg>
