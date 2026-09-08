@@ -4,6 +4,7 @@ import { rupees } from '../fmt.js';
 import { SHOP_NAME } from '../config.js';
 import { monthsBetween } from '../girvi.js';
 import { todayISO } from './bhav.js';
+import { villagesInUse, villageOf, displayName } from '../villages.js';
 
 export function reminderLink(customer, balancePaise) {
   const digits = String(customer.phone || '').replace(/\D/g, '');
@@ -13,6 +14,8 @@ export function reminderLink(customer, balancePaise) {
     `आपका बकाया ${rupees(balancePaise)} है। धन्यवाद।`;
   return `https://wa.me/${number}?text=${encodeURIComponent(msg)}`;
 }
+
+const udhaarFilter = { village: '' };
 
 export async function initUdhaar() {
   const panel = document.getElementById('panel-udhaar');
@@ -25,7 +28,10 @@ export async function initUdhaar() {
     paymentsBy[c.id] = await db.byIndex('payments', 'byCustomer', c.id);
   }));
 
-  const rows = outstanding(customers, billsBy, paymentsBy);
+  const allRows = outstanding(customers, billsBy, paymentsBy);
+  const rows = udhaarFilter.village
+    ? allRows.filter((r) => villageOf(r.customer) === udhaarFilter.village)
+    : allRows;
 
   // "How old is this debt" is the whole question with udhaar, so show it.
   const ageOf = (customerId) => {
@@ -39,12 +45,19 @@ export async function initUdhaar() {
   const totalDue = rows.reduce((s, r) => s + r.balancePaise, 0);
 
   panel.innerHTML = `
-    <p>कुल बकाया: <span class="total">${rupees(totalDue)}</span></p>
+    <label for="u-village">गाँव से छाँटें</label>
+    <select id="u-village">
+      <option value="">— सभी गाँव —</option>
+      ${villagesInUse(customers).map((v) =>
+        `<option value="${v}" ${v === udhaarFilter.village ? 'selected' : ''}>${v}</option>`).join('')}
+    </select>
+    <p>कुल बकाया: <span class="total">${rupees(totalDue)}</span>
+       ${udhaarFilter.village ? `<br><small class="muted">${udhaarFilter.village} में ${rows.length} ग्राहक</small>` : ''}</p>
     ${rows.length === 0 ? '<p>किसी का उधार बाकी नहीं है।</p>' :
       rows.map((r) => `
         <div class="card">
           <div class="row">
-            <span>${r.customer.name}<br><small class="muted">${ageOf(r.customer.id)}</small></span>
+            <span>${displayName(r.customer)}<br><small class="muted">${ageOf(r.customer.id)}</small></span>
             <strong>${rupees(r.balancePaise)}</strong>
           </div>
           <input class="pay-amt" type="number" inputmode="decimal" min="0" step="1"
@@ -56,6 +69,9 @@ export async function initUdhaar() {
         </div>
       `).join('')}
   `;
+
+  const uv = panel.querySelector('#u-village');
+  uv.addEventListener('change', () => { udhaarFilter.village = uv.value; initUdhaar(); });
 
   panel.querySelectorAll('.pay').forEach((btn) => {
     btn.addEventListener('click', async () => {

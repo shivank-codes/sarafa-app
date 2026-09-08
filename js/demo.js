@@ -33,6 +33,7 @@ export const DEMO_VILLAGES = VILLAGES;
 export function demoCustomers() {
   return PEOPLE.map((p) => ({
     name: `${p.name} (${p.village})`,
+    village: p.village,
     phone: p.phone,
     demo: true
   }));

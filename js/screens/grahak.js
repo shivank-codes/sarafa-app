@@ -3,6 +3,8 @@ import { balance } from '../ledger.js';
 import { rupees } from '../fmt.js';
 import { shareBackup, restoreFrom } from '../backup.js';
 import { transliterate } from '../hindi.js';
+import { VILLAGES, filterCustomers, villagesInUse, villageOf,
+         displayName } from '../villages.js';
 import { demoCustomers, demoBills, demoPayments, demoPledges,
          demoPledgePayments } from '../demo.js';
 import { currentRates } from './bhav.js';
@@ -15,10 +17,16 @@ export async function customerBalance(customerId) {
   return balance({ bills, payments });
 }
 
+// Filters live outside the render so re-rendering keeps the current view.
+const filters = { village: '', query: '' };
+
 export async function initGrahak() {
   const panel = document.getElementById('panel-grahak');
   const customers = await db.all('customers');
   const balances = await Promise.all(customers.map((c) => customerBalance(c.id)));
+  const balanceById = new Map(customers.map((c, i) => [c.id, balances[i]]));
+  const shown = filterCustomers(customers, filters);
+  const shownDue = shown.reduce((s, c) => s + (balanceById.get(c.id) || 0), 0);
 
   panel.innerHTML = `
     <h3>नया ग्राहक</h3>
@@ -29,17 +37,35 @@ export async function initGrahak() {
       ${customers.map((c) => `<option value="${c.name}"></option>`).join('')}
     </datalist>
     <p id="name-preview" class="preview"></p>
+    <label for="new-village">गाँव / क़स्बा</label>
+    <input id="new-village" type="text" list="village-list" autocomplete="off"
+           placeholder="जैसे: अवागढ़">
+    <datalist id="village-list">
+      ${[...new Set([...villagesInUse(customers), ...VILLAGES])]
+        .map((v) => `<option value="${v}"></option>`).join('')}
+    </datalist>
     <label for="new-phone">मोबाइल नंबर</label>
     <input id="new-phone" type="tel" inputmode="numeric" autocomplete="off">
     <button id="add-cust" class="btn">ग्राहक जोड़ें</button>
     <p id="cust-status" class="warn"></p>
 
     <h3>सभी ग्राहक</h3>
-    ${customers.length === 0 ? '<p class="muted">अभी कोई ग्राहक नहीं है।</p>' :
-      customers.map((c, i) => `
+    <label for="filter-village">गाँव से छाँटें</label>
+    <select id="filter-village">
+      <option value="">— सभी गाँव —</option>
+      ${villagesInUse(customers).map((v) =>
+        `<option value="${v}" ${v === filters.village ? 'selected' : ''}>${v}</option>`).join('')}
+    </select>
+    <label for="filter-query">नाम या नंबर खोजें</label>
+    <input id="filter-query" type="search" autocomplete="off" value="${filters.query}"
+           placeholder="जैसे: रामू या 9876">
+    <p class="muted small">${shown.length} / ${customers.length} ग्राहक ·
+       बकाया ${rupees(shownDue)}</p>
+    ${shown.length === 0 ? '<p class="muted">कोई ग्राहक नहीं मिला।</p>' :
+      shown.map((c) => `
         <div class="row">
-          <span>${c.name}<br><small>${c.phone || ''}</small></span>
-          <strong>${rupees(balances[i])}</strong>
+          <span>${displayName(c)}<br><small>${c.phone || ''}</small></span>
+          <strong>${rupees(balanceById.get(c.id) || 0)}</strong>
         </div>`).join('')}
 
     <h3>बैकअप</h3>
@@ -80,8 +106,23 @@ export async function initGrahak() {
       status.textContent = 'यह ग्राहक पहले से मौजूद है।';
       return;
     }
-    await db.put('customers', { name, phone });
+    await db.put('customers', {
+      name, phone,
+      village: panel.querySelector('#new-village').value.trim()
+    });
     await initGrahak();
+  });
+
+  const fv = panel.querySelector('#filter-village');
+  const fq = panel.querySelector('#filter-query');
+  fv.addEventListener('change', () => { filters.village = fv.value; initGrahak(); });
+  fq.addEventListener('input', () => {
+    filters.query = fq.value;
+    initGrahak().then(() => {
+      // Keep the cursor in the search box while typing.
+      const box = document.getElementById('filter-query');
+      if (box) { box.focus(); box.setSelectionRange(box.value.length, box.value.length); }
+    });
   });
 
   panel.querySelector('#backup').addEventListener('click', shareBackup);
