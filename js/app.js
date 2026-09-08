@@ -1,5 +1,6 @@
 import { SHOP_NAME } from './config.js';
 import { requestPersistence, open as openDb } from './db.js';
+import { shouldOfferInstall, dismissInstallHint, installHintHtml } from './install.js';
 import { initBhav } from './screens/bhav.js';
 import { initBill } from './screens/bill.js';
 import { initUdhaar } from './screens/udhaar.js';
@@ -47,6 +48,17 @@ if (new URLSearchParams(location.search).has('demo')) {
 // A shop ledger must not be silently evicted by the browser under storage
 // pressure. iOS grants this once the app is on the home screen.
 requestPersistence().catch(() => {});
+
+// Safari on iOS cannot be asked to install; the user has to be told how.
+if (shouldOfferInstall()) {
+  const hint = document.getElementById('install-hint');
+  hint.innerHTML = installHintHtml();
+  hint.hidden = false;
+  hint.querySelector('#install-dismiss').addEventListener('click', () => {
+    dismissInstallHint();
+    hint.hidden = true;
+  });
+}
 
 // If storage is genuinely unavailable (private browsing, blocked site data)
 // the app would fail silently mid-sale, so say so in Hindi. This checks
