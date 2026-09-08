@@ -1,5 +1,5 @@
 const DB_NAME = 'sarafa';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 let dbPromise = null;
 
 export function open() {
@@ -19,6 +19,10 @@ export function open() {
       if (!db.objectStoreNames.contains('customers')) {
         const s = db.createObjectStore('customers', { keyPath: 'id', autoIncrement: true });
         s.createIndex('byPhone', 'phone');
+      }
+      if (!db.objectStoreNames.contains('items')) {
+        const s = db.createObjectStore('items', { keyPath: 'id', autoIncrement: true });
+        s.createIndex('byMetal', 'metal');
       }
       if (!db.objectStoreNames.contains('payments')) {
         const s = db.createObjectStore('payments', { keyPath: 'id', autoIncrement: true });

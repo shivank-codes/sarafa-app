@@ -2,16 +2,16 @@ import * as db from './db.js';
 import { APP_VERSION } from './config.js';
 import { validateBackup } from './backup-validate.js';
 
-const STORES = ['rates', 'bills', 'customers', 'payments'];
+const STORES = ['rates', 'bills', 'customers', 'payments', 'items'];
 
 export async function exportAll() {
-  const [rates, bills, customers, payments] = await Promise.all(
+  const [rates, bills, customers, payments, items] = await Promise.all(
     STORES.map((s) => db.all(s))
   );
   return {
     version: APP_VERSION,
     exportedAt: new Date().toISOString(),
-    rates, bills, customers, payments
+    rates, bills, customers, payments, items
   };
 }
 
@@ -53,7 +53,7 @@ export async function restoreFrom(file) {
 
   for (const s of STORES) await db.clear(s);
   for (const s of STORES) {
-    for (const row of parsed[s]) await db.put(s, row);
+    for (const row of parsed[s] || []) await db.put(s, row);
   }
   return { ok: true, counts: check.counts };
 }

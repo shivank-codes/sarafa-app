@@ -29,7 +29,7 @@ test('a store that is not an array is rejected', () => {
 test('validateBackup counts the records it would restore', () => {
   const r = validateBackup({ version: '1', rates: [1], bills: [1, 2],
     customers: [1, 2, 3], payments: [] });
-  assert.deepEqual(r.counts, { rates: 1, bills: 2, customers: 3, payments: 0 });
+  assert.deepEqual(r.counts, { rates: 1, bills: 2, customers: 3, payments: 0, items: 0 });
 });
 
 test('rateChange reports the rise since the previous rate', () => {
@@ -46,4 +46,18 @@ test('rateChange reports no change', () => {
 
 test('rateChange with no previous rate has nothing to compare', () => {
   assert.equal(rateChange(720000, null), null);
+});
+
+test('a backup made before the catalog existed still restores', () => {
+  const r = validateBackup({ version: '1', rates: [], bills: [],
+    customers: [{ id: 1 }], payments: [] });
+  assert.equal(r.ok, true);
+  assert.equal(r.counts.items, 0);
+  assert.equal(r.counts.customers, 1);
+});
+
+test('a malformed catalog in a backup is still rejected', () => {
+  const r = validateBackup({ version: '1', rates: [], bills: [],
+    customers: [], payments: [], items: 'not an array' });
+  assert.equal(r.ok, false);
 });
