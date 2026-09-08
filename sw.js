@@ -1,4 +1,4 @@
-const CACHE = 'sarafa-v17';
+const CACHE = 'sarafa-v18';
 const SHELL = [
   './', './index.html', './css/app.css', './manifest.webmanifest',
   './js/config.js', './js/app.js', './js/fmt.js', './js/calc.js', './js/pricing.js', './js/market.js',
@@ -14,11 +14,11 @@ const SHELL = [
   './img/designs/chain.svg', './img/designs/haar.svg', './img/designs/jhumka.svg',
   './img/designs/nath.svg', './img/designs/ring.svg', './img/designs/bangle.svg',
   './img/designs/payal.svg', './img/designs/coin.svg', './img/designs/tika.svg',
-  './img/designs/rakhi.svg',
+  './img/designs/rakhi.svg', './img/designs/mangalsutra.svg',
   './img/designs/photos/chain.jpg', './img/designs/photos/haar.jpg',
   './img/designs/photos/jhumka.jpg', './img/designs/photos/nath.jpg',
   './img/designs/photos/ring.jpg', './img/designs/photos/bangle.jpg',
-  './img/designs/photos/payal.jpg',
+  './img/designs/photos/payal.jpg', './img/designs/photos/coin.jpg',
   './fonts/NotoSansDevanagari-Regular.woff2',
   './fonts/NotoSansDevanagari-Bold.woff2'
 ];

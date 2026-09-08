@@ -20,7 +20,10 @@ of the actual piece as soon as one is taken.
   https://commons.wikimedia.org/wiki/File:Inlaid_bangle_bracelet_Bracelet%2C_18th%E2%80%9319th_century_%28CH_18647655%29.jpg
 - **ring.jpg** — “India, Mughal, 18th century - Ring - 1944.67 - Cleveland Museum of Art.tif” · CC0 · Unknown  
   https://commons.wikimedia.org/wiki/File:India%2C_Mughal%2C_18th_century_-_Ring_-_1944.67_-_Cleveland_Museum_of_Art.tif
+- **coin.jpg** — “Rupee, 1835 - British India, William IV.jpg” · CC0 · Петров Эдуард  
+  https://commons.wikimedia.org/wiki/File:Rupee,_1835_-_British_India,_William_IV.jpg
 
-The remaining kinds (सिक्का, मांग टीका, राखी) had no usable
-free photograph, so `img/designs/*.svg` — drawings of the piece on a tray — are
-used instead. Those are original to this project.
+मांग टीका and राखी had no usable free photograph — Commons has none of the
+first and only crowd shots of the second — and मंगलसूत्र likewise, so
+`img/designs/*.svg`, drawings of the piece on a tray, stand in for those three.
+Those drawings are original to this project.

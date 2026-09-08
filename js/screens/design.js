@@ -42,6 +42,10 @@ export async function initDesign() {
     <p id="d-status" class="warn"></p>
 
     <h3>कैटलॉग — ${items.length} डिज़ाइन</h3>
+    <p class="muted credit-note">जिन डिज़ाइन की फ़ोटो नहीं ली गई, उन पर नमूना तस्वीर लगी है —
+      वह आपका माल नहीं है। अपनी फ़ोटो लगाते ही वह हट जाएगी।
+      <a href="https://github.com/shivank-codes/sarafa-app/blob/main/img/designs/CREDITS.md"
+         target="_blank" rel="noopener">तस्वीरें कहाँ से आईं</a></p>
     <div class="notice">
       <p>नमूना डिज़ाइन जोड़ें — वज़न और मजदूरी अपने हिसाब से बदल लें,
          और फ़ोटो अपनी लगाएं। जो पहले से हैं वे दोबारा नहीं जुड़ेंगे।</p>

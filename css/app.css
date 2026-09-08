@@ -114,6 +114,8 @@ h3 { margin: 26px 0 10px; font-size: 17px; color: #555;
 /* A stand-in picture, not a photo of his own stock — see img/designs/CREDITS.md */
 .card.item img.sketch { object-fit: cover; background: #5e0d09; }
 .card.item small { color: #777; }
+.credit-note { font-size: 15px; line-height: 1.45; margin: -4px 0 12px; }
+.credit-note a { color: var(--gold); }
 .card.item .price { color: var(--gold); font-weight: 700; font-size: 19px; }
 .card.item .btn { margin: 6px 0 0; min-height: 44px; font-size: 16px; }
 @media (max-width: 340px) { .grid { grid-template-columns: 1fr; } }

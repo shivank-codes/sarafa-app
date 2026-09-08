@@ -14,11 +14,12 @@ const RULES = [
   [/सिक्का|coin|sikka/i, 'coin'],
   [/टीका|बोरला|tika|borla/i, 'tika'],
   [/हार|हंसुली|गुलूबंद|हमेल|चंपाकली|haar|hansuli/i, 'haar'],
-  [/चेन|मंगलसूत्र|कंठी|सुतिया|chain|mangalsutra|kanthi/i, 'chain']
+  [/मंगलसूत्र|mangalsutra/i, 'mangalsutra'],
+  [/चेन|कंठी|सुतिया|chain|kanthi/i, 'chain']
 ];
 
 // Kinds we found a usable free photograph for. The rest keep the drawing.
-const PHOTOS = new Set(['jhumka', 'nath', 'ring', 'bangle', 'payal', 'haar', 'chain']);
+const PHOTOS = new Set(['jhumka', 'nath', 'ring', 'bangle', 'payal', 'haar', 'chain', 'coin']);
 
 export function sketchFor(name) {
   const n = String(name || '');
