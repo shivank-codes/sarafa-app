@@ -1,3 +1,5 @@
+import { SAMPLE_ITEMS, REGIONAL_ITEMS } from './samples.js';
+
 // Demo data for trying the app out before it holds anything real.
 //
 // Every record carries `demo: true`. Removal deletes only tagged records, so
@@ -119,4 +121,12 @@ export function demoPledgePayments(pledgeIds) {
     { pledgeId: pledgeIds[0], amountPaise: 200000, date: daysAgo(35), demo: true },
     { pledgeId: pledgeIds[1], amountPaise: 440000, date: daysAgo(10), demo: true }
   ];
+}
+
+// The catalog for the demo: the same starter designs the डिज़ाइन screen offers,
+// tagged so clearing the demo takes them out again. They carry no photo, so
+// each one falls back to its sample picture — which is the point of showing
+// the catalog in a demo at all.
+export function demoItems() {
+  return [...SAMPLE_ITEMS, ...REGIONAL_ITEMS].map((it) => ({ ...it, demo: true }));
 }

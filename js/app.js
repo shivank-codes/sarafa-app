@@ -33,6 +33,17 @@ if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js');
 }
 
+// ?demo fills the book with the sample records and lands on the catalog, so
+// the app can be shown to someone without tapping through the setup first.
+// It refuses to run twice, and डेमो डेटा हटाएं on the ग्राहक screen removes
+// every record it added.
+if (new URLSearchParams(location.search).has('demo')) {
+  import('./demo-seed.js')
+    .then((m) => m.seedDemo({ withRate: true }))
+    .then(() => showTab('design'))
+    .catch(() => {});
+}
+
 // A shop ledger must not be silently evicted by the browser under storage
 // pressure. iOS grants this once the app is on the home screen.
 requestPersistence().catch(() => {});

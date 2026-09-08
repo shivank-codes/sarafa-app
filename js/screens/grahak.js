@@ -5,9 +5,7 @@ import { shareBackup, restoreFrom } from '../backup.js';
 import { transliterate } from '../hindi.js';
 import { VILLAGES, filterCustomers, villagesInUse, villageOf,
          displayName } from '../villages.js';
-import { demoCustomers, demoBills, demoPayments, demoPledges,
-         demoPledgePayments } from '../demo.js';
-import { currentRates } from './bhav.js';
+import { seedDemo } from '../demo-seed.js';
 
 export async function customerBalance(customerId) {
   const [bills, payments] = await Promise.all([
@@ -131,22 +129,14 @@ export async function initGrahak() {
 
   panel.querySelector('#demo-load').addEventListener('click', async () => {
     demoStatus.textContent = 'डेमो डेटा भरा जा रहा है…';
-    const rates = await currentRates();
-    const sona = rates ? rates.sonaPerGram : 725000;
-    const chandi = rates ? rates.chandiPerGram : 9200;
-
-    const custIds = [];
-    for (const c of demoCustomers()) custIds.push(await db.put('customers', c));
-    for (const b of demoBills(custIds, sona, chandi)) await db.put('bills', b);
-    for (const p of demoPayments(custIds)) await db.put('payments', p);
-
-    const pledgeIds = [];
-    for (const p of demoPledges()) pledgeIds.push(await db.put('pledges', p));
-    for (const p of demoPledgePayments(pledgeIds)) await db.put('pledgePayments', p);
-
+    const { seeded } = await seedDemo();
     await initGrahak();
     const s2 = document.getElementById('demo-status');
-    if (s2) s2.textContent = 'डेमो डेटा भर गया। हर टैब देखें।';
+    if (s2) {
+      s2.textContent = seeded
+        ? 'डेमो डेटा भर गया। हर टैब देखें।'
+        : 'डेमो डेटा पहले से भरा है।';
+    }
   });
 
   // Deletes ONLY records tagged demo:true. A real bill entered by hand has no
@@ -155,7 +145,7 @@ export async function initGrahak() {
     demoStatus.textContent = 'डेमो हटाया जा रहा है…';
     let removed = 0;
     for (const store of ['bills', 'payments', 'customers',
-                         'pledgePayments', 'pledges', 'items']) {
+                         'pledgePayments', 'pledges', 'items', 'rates']) {
       for (const row of await db.all(store)) {
         if (row.demo === true) { await db.del(store, row.id); removed += 1; }
       }

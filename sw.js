@@ -1,4 +1,4 @@
-const CACHE = 'sarafa-v20';
+const CACHE = 'sarafa-v21';
 const SHELL = [
   './', './index.html', './css/app.css', './manifest.webmanifest',
   './js/config.js', './js/app.js', './js/fmt.js', './js/calc.js', './js/pricing.js', './js/market.js',
@@ -6,7 +6,7 @@ const SHELL = [
   './js/ledger.js', './js/day.js', './js/hindi.js', './js/db.js', './js/backup.js', './js/backup-validate.js',
   './js/screens/bhav.js', './js/screens/bill.js',
   './js/screens/udhaar.js', './js/screens/grahak.js', './js/screens/design.js',
-  './js/catalog.js', './js/photo.js', './js/samples.js', './js/demo.js', './js/villages.js',
+  './js/catalog.js', './js/photo.js', './js/samples.js', './js/demo.js', './js/demo-seed.js', './js/villages.js',
   './js/girvi.js', './js/screens/girvi.js',
   './icons/icon-180.png', './icons/icon-192.png', './icons/icon-512.png',
   './img/sherowali.svg',
