@@ -47,10 +47,12 @@ export async function initBhav() {
         <button id="carry" class="btn ghost">वही भाव आज भी लगाएं</button>
       </div>` : ''}
 
-    <label for="sona">सोना — भाव प्रति ग्राम</label>
+    <label for="sona">सोना — भाव प्रति ग्राम (999 / 24 कैरेट)</label>
     <input id="sona" type="number" inputmode="decimal" min="0" step="1">
-    <label for="chandi">चांदी — भाव प्रति ग्राम</label>
-    <input id="chandi" type="number" inputmode="decimal" min="0" step="0.01">
+    <label for="chandi">चांदी — भाव प्रति किलो</label>
+    <input id="chandi" type="number" inputmode="decimal" min="0" step="100"
+           placeholder="जैसे: 92000">
+    <p id="chandi-per-gram" class="muted small"></p>
     <button id="save-bhav" class="btn">आज का भाव सुरक्षित करें</button>
     <p id="bhav-status"></p>
 
@@ -78,7 +80,7 @@ export async function initBhav() {
 
   if (saved) {
     sona.value = saved.sonaPerGram / 100;
-    chandi.value = saved.chandiPerGram / 100;
+    chandi.value = (saved.chandiPerGram / 100) * 1000;
     status.innerHTML = `आज का भाव तय है — सोना ${rupees(saved.sonaPerGram)}` +
       changeLabel(saved.sonaPerGram, prev ? prev.sonaPerGram : null) +
       `, चांदी ${rupees(saved.chandiPerGram)}`;
@@ -90,14 +92,27 @@ export async function initBhav() {
   if (carry) {
     carry.addEventListener('click', () => {
       sona.value = prev.sonaPerGram / 100;
-      chandi.value = prev.chandiPerGram / 100;
+      chandi.value = (prev.chandiPerGram / 100) * 1000;
       panel.querySelector('#save-bhav').click();
     });
   }
 
+  const perGramNote = panel.querySelector('#chandi-per-gram');
+  const echoChandi = () => {
+    const perKilo = Number(chandi.value) || 0;
+    perGramNote.textContent = perKilo > 0
+      ? `= ${rupees(Math.round(perKilo * 100 / 1000))} प्रति ग्राम`
+      : '';
+  };
+  chandi.addEventListener('input', echoChandi);
+  echoChandi();
+
   panel.querySelector('#save-bhav').addEventListener('click', async () => {
     const s = Math.round(Number(sona.value) * 100);
-    const c = Math.round(Number(chandi.value) * 100);
+    // Silver is quoted per kilo in India. Storing per gram keeps every other
+    // calculation uniform, and typing 92 when he means 92,000 would otherwise
+    // be a silent 1000x error.
+    const c = Math.round((Number(chandi.value) * 100) / 1000);
     if (!(s > 0) || !(c > 0)) {
       status.textContent = 'कृपया सोना और चांदी दोनों का भाव भरें।';
       return;

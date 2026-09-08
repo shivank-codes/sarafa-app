@@ -2,6 +2,8 @@ import * as db from '../db.js';
 import { outstanding } from '../ledger.js';
 import { rupees } from '../fmt.js';
 import { SHOP_NAME } from '../config.js';
+import { monthsBetween } from '../girvi.js';
+import { todayISO } from './bhav.js';
 
 export function reminderLink(customer, balancePaise) {
   const digits = String(customer.phone || '').replace(/\D/g, '');
@@ -24,6 +26,16 @@ export async function initUdhaar() {
   }));
 
   const rows = outstanding(customers, billsBy, paymentsBy);
+
+  // "How old is this debt" is the whole question with udhaar, so show it.
+  const ageOf = (customerId) => {
+    const bills = (billsBy[customerId] || []).filter((b) => b.settlement === 'udhaar');
+    if (!bills.length) return '';
+    const oldest = bills.map((b) => b.date).sort()[0];
+    const { months, days } = monthsBetween(oldest, todayISO());
+    if (months >= 1) return `${months} माह पुराना`;
+    return `${days} दिन पुराना`;
+  };
   const totalDue = rows.reduce((s, r) => s + r.balancePaise, 0);
 
   panel.innerHTML = `
@@ -32,7 +44,7 @@ export async function initUdhaar() {
       rows.map((r) => `
         <div class="card">
           <div class="row">
-            <span>${r.customer.name}</span>
+            <span>${r.customer.name}<br><small class="muted">${ageOf(r.customer.id)}</small></span>
             <strong>${rupees(r.balancePaise)}</strong>
           </div>
           <input class="pay-amt" type="number" inputmode="decimal" min="0" step="1"
