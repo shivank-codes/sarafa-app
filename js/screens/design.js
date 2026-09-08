@@ -5,7 +5,7 @@ import { validateItem, itemPrice } from '../catalog.js';
 import { compressImage, blobToDataUrl } from '../photo.js';
 import { currentRates } from './bhav.js';
 import { SHOP_NAME } from '../config.js';
-import { SAMPLE_ITEMS } from '../samples.js';
+import { SAMPLE_ITEMS, REGIONAL_ITEMS } from '../samples.js';
 
 const METAL = { sona: 'सोना', chandi: 'चांदी' };
 
@@ -41,12 +41,12 @@ export async function initDesign() {
     <p id="d-status" class="warn"></p>
 
     <h3>कैटलॉग — ${items.length} डिज़ाइन</h3>
-    ${items.length === 0 ? `
-      <div class="notice">
-        <p>शुरू करने के लिए कुछ आम डिज़ाइन जोड़ लें — वज़न और मजदूरी अपने
-           हिसाब से बदल लें, और फ़ोटो अपनी लगाएं।</p>
-        <button id="d-samples" class="btn ghost">${SAMPLE_ITEMS.length} नमूना डिज़ाइन जोड़ें</button>
-      </div>` : ''}
+    <div class="notice">
+      <p>नमूना डिज़ाइन जोड़ें — वज़न और मजदूरी अपने हिसाब से बदल लें,
+         और फ़ोटो अपनी लगाएं। जो पहले से हैं वे दोबारा नहीं जुड़ेंगे।</p>
+      <button id="d-samples" class="btn ghost">आम डिज़ाइन (${SAMPLE_ITEMS.length})</button>
+      <button id="d-regional" class="btn ghost">इस इलाके के पारंपरिक डिज़ाइन (${REGIONAL_ITEMS.length})</button>
+    </div>
     ${!rates ? '<p class="muted">आज का भाव भरें, तभी दाम दिखेंगे।</p>' : ''}
     ${items.length === 0 ? '<p class="muted">अभी कोई डिज़ाइन नहीं है।</p>' : `
       <div class="grid">
@@ -107,16 +107,24 @@ export async function initDesign() {
 
   // Sharing a design opens WhatsApp with the photo and price already filled
   // in. He picks the customer and taps send — the app never sends anything.
-  const samplesBtn = panel.querySelector('#d-samples');
-  if (samplesBtn) {
-    samplesBtn.addEventListener('click', async () => {
-      const now = new Date().toISOString();
-      for (const it of SAMPLE_ITEMS) {
-        await db.put('items', { ...it, photo: null, createdAt: now });
-      }
-      await initDesign();
-    });
+  // Adding a sample set twice must not duplicate the catalog, so anything
+  // already present by name is skipped.
+  async function seed(list) {
+    const existing = new Set((await db.all('items')).map((i) => i.name));
+    const now = new Date().toISOString();
+    let added = 0;
+    for (const it of list) {
+      if (existing.has(it.name)) continue;
+      await db.put('items', { ...it, photo: null, createdAt: now });
+      added += 1;
+    }
+    await initDesign();
+    const s = document.getElementById('d-status');
+    if (s) s.textContent = added ? `${added} डिज़ाइन जुड़े।` : 'ये सब पहले से मौजूद हैं।';
   }
+
+  panel.querySelector('#d-samples').addEventListener('click', () => seed(SAMPLE_ITEMS));
+  panel.querySelector('#d-regional').addEventListener('click', () => seed(REGIONAL_ITEMS));
 
   panel.querySelectorAll('.share-item').forEach((btn) => {
     btn.addEventListener('click', async () => {

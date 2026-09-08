@@ -1,4 +1,4 @@
-const CACHE = 'sarafa-v7';
+const CACHE = 'sarafa-v8';
 const SHELL = [
   './', './index.html', './css/app.css', './manifest.webmanifest',
   './js/config.js', './js/app.js', './js/fmt.js', './js/calc.js',
