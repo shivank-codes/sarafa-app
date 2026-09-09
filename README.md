@@ -21,6 +21,29 @@ network.
 
 Bump `CACHE` in `sw.js` only when adding or removing a file in `SHELL`.
 
+## Sending it to someone
+
+The link to share, which opens on a filled catalog rather than an empty book:
+
+    https://shivank-codes.github.io/sarafa-app/?demo
+
+Every record it adds is tagged `demo: true` and `seedDemo` refuses to run
+twice, so a refresh cannot double anything and clearing the demo cannot touch
+a real entry.
+
+The message to paste alongside it:
+
+    सर्राफ — सोने-चांदी के भाव, बिल, उधार और गिरवी का हिसाब।
+    लिंक खोलिए, फिर ••• दबाकर "Open in Safari" चुनिए,
+    उसके बाद शेयर के बटन से "Add to Home Screen"।
+    फिर यह ऐप की तरह खुलेगा और बिना इंटरनेट भी चलेगा।
+
+The Safari step is the one that matters. WhatsApp opens links in its own
+browser, which has no "Add to Home Screen" at all, so a link followed
+straight from the chat can never become an app. The app says this itself when
+it can tell it is running inside a wrapper, but on iOS that is only a guess,
+which is why the message says it too.
+
 ## Putting it on the iPhone
 
 Two ways, both free.

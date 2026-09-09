@@ -19,6 +19,7 @@ function setup({ ua, standalone = false, displayMode = false,
 const IPHONE = 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) Safari';
 const ANDROID = 'Mozilla/5.0 (Linux; Android 13) Chrome';
 const IPAD = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Safari';
+const WHATSAPP = 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) Safari WhatsApp/2.24';
 
 let mod;
 beforeEach(async () => { mod = await import('../js/install.js'); });
@@ -57,7 +58,34 @@ test('blocked storage shows the hint rather than swallowing it', () => {
 });
 
 test('the hint names the gesture a shopkeeper has to find', () => {
+  setup({ ua: IPHONE });
   const html = mod.installHintHtml();
   assert.match(html, /Add to Home Screen/);
   assert.match(html, /शेयर/);
+});
+
+test('a link opened inside WhatsApp is recognised', () => {
+  setup({ ua: WHATSAPP });
+  assert.equal(mod.isInAppBrowser(), true);
+  setup({ ua: IPHONE });
+  assert.equal(mod.isInAppBrowser(), false, 'plain Safari must not be mistaken for a wrapper');
+});
+
+test('WhatsApp is still offered help, since that is where it is needed', () => {
+  setup({ ua: WHATSAPP });
+  assert.equal(mod.shouldOfferInstall(), true);
+});
+
+test('inside WhatsApp the app asks for Safari, not a share button that is not there', () => {
+  setup({ ua: WHATSAPP });
+  const html = mod.installHintHtml();
+  assert.match(html, /Open in Safari/);
+  assert.doesNotMatch(html, /Add to Home Screen/,
+    'the share-sheet gesture is impossible here and must not be named');
+});
+
+test('Safari still gets a way out when the wrapper went undetected', () => {
+  setup({ ua: IPHONE });
+  assert.match(mod.installHintHtml(), /Safari/,
+    'someone with no share button must be told where to go');
 });

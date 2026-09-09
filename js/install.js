@@ -10,6 +10,22 @@ export function isIos() {
          (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
 }
 
+// A link tapped in WhatsApp opens inside WhatsApp, not Safari, and that
+// browser has no "Add to Home Screen" anywhere in it. Telling someone there
+// to press Safari's share button sends them looking for a button that does
+// not exist, and the app stays a tab that gets thrown away with the ledger
+// in it.
+//
+// Best effort only: on iOS these wrappers sometimes present a Safari-based
+// browser whose user agent is Safari's, indistinguishable from the real
+// thing. The Safari message therefore has to survive being shown here, which
+// is why it ends with a line about opening in Safari.
+const IN_APP = /WhatsApp|FBAN|FBAV|Instagram|Line\/|Snapchat|Twitter|MicroMessenger/;
+
+export function isInAppBrowser() {
+  return IN_APP.test(navigator.userAgent);
+}
+
 export function isInstalled() {
   return navigator.standalone === true ||
          window.matchMedia('(display-mode: standalone)').matches;
@@ -31,6 +47,21 @@ export function dismissInstallHint() {
 }
 
 export function installHintHtml() {
+  return isInAppBrowser() ? safariFirstHtml() : addToHomeScreenHtml();
+}
+
+// Inside WhatsApp and its like: one instruction only, because nothing else
+// can be done from here.
+function safariFirstHtml() {
+  return `
+    <p><strong>पहले Safari में खोलें</strong></p>
+    <p>ऊपर या नीचे कोने में <strong>•••</strong> दबाकर
+       <strong>“Open in Safari”</strong> चुनें। उसके बाद यह ऐप फ़ोन में
+       लग जाएगा।</p>
+    <button id="install-dismiss" class="btn ghost">ठीक है</button>`;
+}
+
+function addToHomeScreenHtml() {
   return `
     <p><strong>इस ऐप को फ़ोन में लगाएं</strong></p>
     <p>नीचे Safari में <svg class="ios-share" viewBox="0 0 24 24" width="18" height="18"
@@ -39,5 +70,7 @@ export function installHintHtml() {
          <path d="M6 12H5v8h14v-8h-1"/></g></svg> शेयर का बटन दबाएं, फिर
        <strong>“Add to Home Screen”</strong> चुनें। फिर यह ऐप की तरह खुलेगा,
        बिना इंटरनेट भी चलेगा, और हिसाब फ़ोन में सुरक्षित रहेगा।</p>
+    <p class="small">नीचे शेयर का बटन न दिखे तो यह पन्ना पहले Safari में
+       खोलें।</p>
     <button id="install-dismiss" class="btn ghost">ठीक है</button>`;
 }
