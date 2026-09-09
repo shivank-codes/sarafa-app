@@ -1,2 +1,7 @@
 node_modules/
 .DS_Store
+
+dist/
+scripts/ios/build/
+scripts/ios/*.xcodeproj/project.xcworkspace/
+scripts/ios/*.xcodeproj/xcuserdata/
