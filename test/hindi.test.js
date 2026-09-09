@@ -2,8 +2,10 @@ import { test } from 'node:test';
 import assert from 'node:assert';
 import { transliterate } from '../js/hindi.js';
 
-test('simple name with inherent a', () => {
-  assert.equal(transliterate('ramu'), 'रमु');
+test('an inherent a between consonants writes nothing', () => {
+  // Not a listed name, so this exercises the phonetic rules themselves.
+  assert.equal(transliterate('kamal'), 'कमल');
+  assert.equal(transliterate('sagar'), 'सगर');
 });
 
 test('long vowels use doubled letters', () => {
@@ -43,7 +45,7 @@ test('a name ending in "a" keeps its ा — it is not the silent schwa', () => 
   // and common enough in his book to matter.
   assert.equal(transliterate('pooja'), 'पूजा');
   assert.equal(transliterate('geeta'), 'गीता');
-  assert.equal(transliterate('anita'), 'अनिता');
+  assert.equal(transliterate('savita'), 'सविता');
   assert.equal(transliterate('seema'), 'सीमा');
 });
 
@@ -51,4 +53,30 @@ test('a schwa inside a word is still silent', () => {
   assert.equal(transliterate('kamal'), 'कमल');
   assert.equal(transliterate('mohan'), 'मोहन');
   assert.equal(transliterate('suresh'), 'सुरेश');
+});
+
+test('vowel length comes from knowing the name, not from a rule', () => {
+  // No rule can separate these: both are consonant + u at the end.
+  assert.equal(transliterate('ramu'), 'रामू');
+  assert.equal(transliterate('raghu'), 'रघु');
+  assert.equal(transliterate('raju'), 'राजू');
+  assert.equal(transliterate('sita'), 'सीता');
+  assert.equal(transliterate('shyam'), 'श्याम');
+  assert.equal(transliterate('rakesh'), 'राकेश');
+});
+
+test('spelling variants land on one name', () => {
+  assert.equal(transliterate('geeta'), transliterate('gita'));
+  assert.equal(transliterate('sunita'), transliterate('suneeta'));
+  assert.equal(transliterate('laxmi'), transliterate('lakshmi'));
+});
+
+test('each word of a full name is looked up on its own', () => {
+  assert.equal(transliterate('munni devi'), 'मुन्नी देवी');
+  assert.equal(transliterate('ramwati devi'), 'रामवती देवी');
+});
+
+test('a name not in the list still transliterates phonetically', () => {
+  assert.equal(transliterate('mohan'), 'मोहन');
+  assert.ok(transliterate('bhagwandas').length > 0);
 });
